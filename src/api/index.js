@@ -44,3 +44,24 @@ export const fetchCountries = async () => {
         console.log(error)
     }
 }
+
+const urlC = 'https://api.opencovid.ca'
+
+export const fetchDataC = async () => {
+    // let changeableUrl = url;
+
+    // if(country){
+    //     changeableUrl=`${url}/countries/${country}`
+    // }
+
+    try {
+        //destructure data from res, and destructure confirmed, recovered, deaths, lastUpdate from data
+        // const { data: { confirmed, deaths, lastUpdate } } = await axios.get(changeableUrl);
+
+        const { data} = await axios.get(urlC);
+        // console.log(summary)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}

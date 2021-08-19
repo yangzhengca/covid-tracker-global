@@ -4,83 +4,46 @@ import CountUp from 'react-countup';
 import cx from 'classnames'
 
 import styles from './Cards.module.css'
+import Carda from './Carda/Carda';
 
 
-const Cards = ({data: { confirmed, deaths, lastUpdate }}) => {
-    if(!confirmed){
-        return 'Loading...'
+const Cards = ({data, isCanada}) => {
+
+    if(isCanada){
+        const { summary } = data
+        var { cumulative_cases,cumulative_deaths, active_cases, date} =summary[0]
+        // console.log(summary[0])
+        if(!cumulative_cases){
+            return 'Loading...'
+        }
+    }else{
+        var { confirmed, deaths, lastUpdate } = data
+        if(!confirmed){
+            return 'Loading...'
+        }
     }
-    // console.log(recovered)
+
+
     return (
         <div className={styles.container}>
             <Grid container spacing={3} justify='center'>
-                <Grid item component={Card} xs={12} md={4} className={cx(styles.card, styles.infected)}>
-                    <CardContent>
-                        <Typography color='textSecondary' gutterBottom >
-                            Infected
-                        </Typography>
-                        <Typography variant='h5'>
-                            <CountUp 
-                                start={ 0 }
-                                end={ confirmed.value }
-                                duration={ 2.5 }
-                                separator=','
-                            />
-                        </Typography>
-                        <Typography color='textSecondary'>
-                            { new Date(lastUpdate).toDateString() }
-                        </Typography>
-                        <Typography variant='body2'>
-                            Number of active cases of COVID-19 
-                        </Typography>
-                    </CardContent>
-                </Grid>
+                {isCanada ? (
+                    <> 
+                        <Carda cardData={cumulative_cases} date={date} title='total_cases' text='Number of total cases of COVID-19' size={3}/>
+                        
+                        <Carda cardData={active_cases} date={date} title='active_cases' text='Number of active cases of COVID-19' size={3}/>
 
-                {/* <Grid item component={Card} xs={12} md={3} className={cx(styles.card, styles.recovered)}>
-                    <CardContent>
-                        <Typography color='textSecondary' gutterBottom >
-                            Recovered
-                        </Typography>
-                        <Typography variant='h5'>
-                            <CountUp 
-                                start={ 0 }
-                                end={ recovered.value }
-                                duration={ 2.5 }
-                                separator=','
-                            />
-                        </Typography>
-                        <Typography color='textSecondary'>
-                            { new Date(lastUpdate).toDateString() }
-                        </Typography>
-                        <Typography variant='body2'>
-                            Number of recoveries from COVID-19 
-                        </Typography>
-                    </CardContent>
-                </Grid> */}
+                        <Carda cardData={cumulative_deaths} date={date} title='deaths' text='Number of deaths caused by COVID-19' size={3}/>
+                    </>
+                ):(
+                    <>
+                        <Carda cardData={confirmed.value} date={new Date(lastUpdate).toDateString()} title='infected' text='Number of total cases of COVID-19' size={4}/>
 
-                <Grid item component={Card} xs={12} md={4} className={cx(styles.card, styles.deaths)}>
-                    <CardContent>
-                        <Typography color='textSecondary' gutterBottom >
-                            Deaths
-                        </Typography>
-                        <Typography variant='h5'>
-                            <CountUp 
-                                start={ 0 }
-                                end={ deaths.value }
-                                duration={ 2.5 }
-                                separator=','
-                            />
-                        </Typography>
-                        <Typography color='textSecondary'>
-                            { new Date(lastUpdate).toDateString() }
-                        </Typography>
-                        <Typography variant='body2'>
-                            Number of deaths caused by COVID-19 
-                        </Typography>
-                    </CardContent>
-                </Grid>
-            </Grid>
-            
+                        <Carda cardData={deaths.value} date={new Date(lastUpdate).toDateString()} title='deaths' text='Number of deaths caused by COVID-19' size={4}/>
+                    </>
+                )}
+                
+            </Grid>            
         </div>
     )
 }
