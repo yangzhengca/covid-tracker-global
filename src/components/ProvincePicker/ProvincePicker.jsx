@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { NativeSelect, FormControl } from '@material-ui/core'
 import styles from './ProvincePicker.module.css'
-import { fetchCountries } from '../../api'
+import { fetchProvinces } from '../../api'
 
-const ProvincePicker = ({  provinces, handleProvinceChange }) => {
-    const [ fetchedCountries, setFetchedCountries ] = useState([])
+const ProvincePicker = ({  handleProvinceChange }) => {
+    const [ fetchedProvinces, setFetchedProvinces ] = useState([])
+
 
     // useEffect(() => {
     //     const fetchAPI = async () => {
@@ -13,13 +14,27 @@ const ProvincePicker = ({  provinces, handleProvinceChange }) => {
     //     fetchAPI()
     // },[setFetchedCountries])
 
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const fetchedProvincesData = await fetchProvinces();
+            // console.log(fetchedProvincesData)
+            const provinces=fetchedProvincesData.prov.map((item)=>{
+                return item.province_full
+            })
+            // console.log(provinces)
+            setFetchedProvinces(provinces);
+
+
+        }
+        fetchAPI()
+    },[setFetchedProvinces])
 
 
     return (
         <FormControl className={styles.formControl}>
             <NativeSelect defaultValue='' onChange={(e) => handleProvinceChange(e.target.value)}>
                 <option value=''>Whole Country</option>
-                {provinces.map((province,i) => <option key={i} value={province}>{province}</option>)}
+                {fetchedProvinces.map((province,i) => <option key={i} value={province}>{province}</option>)}
             </NativeSelect>
         </FormControl>
     )

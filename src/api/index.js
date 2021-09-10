@@ -85,6 +85,25 @@ export const fetchDataCanadaTime = async () => {
     }
 }
 
+export const fetchDataProvSummary = async () => {
+    // let changeableUrl = url;
+
+    // if(country){
+    //     changeableUrl=`${url}/countries/${country}`
+    // }
+
+    try {
+        //destructure data from res, and destructure confirmed, recovered, deaths, lastUpdate from data
+        // const { data: { confirmed, deaths, lastUpdate } } = await axios.get(changeableUrl);
+
+        const { data} = await axios.get(`${urlC}/summary?loc=prov`);
+        // console.log(data)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const fetchProvinces = async () => {
     // let changeableUrl = url;
 

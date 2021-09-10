@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Cards, Chart, CountryPicker, ProvincePicker } from "./components";
+import { Cards, Chart, CountryPicker, ProvincePicker, ChartCa, Tables } from "./components";
 import styles from "./App.module.css";
-import { fetchData, fetchDataC, fetchDataCanadaTime, fetchProvinces } from "./api";
+import { fetchData, fetchDataC, fetchDataCanadaTime, fetchProvinces, fetchDataProvSummary } from "./api";
 import covid from "./images/covid.png";
 import { ButtonGroup, Button } from "@material-ui/core";
 
@@ -27,17 +27,21 @@ class App extends React.Component {
     this.setState({ dataC: fetchedDataC });
 
     const fetchedDataCanadaTime = await fetchDataCanadaTime();
-    console.log(fetchedDataCanadaTime)
+    // console.log(fetchedDataCanadaTime)
     this.setState({ dataCT: fetchedDataCanadaTime });
 
+    const fetchedDataProvSummary = await fetchDataProvSummary()
+    console.log(fetchedDataProvSummary)
+    this.setState({ dataCP: fetchedDataProvSummary });
 
-    const fetchedProvinces = await fetchProvinces();
-    // console.log(fetchedProvinces.prov)
-      const provinces=fetchedProvinces.prov.map((item)=>{
-        return item.province_full
-      })
-    // console.log(provinces)
-    this.setState({ provinces: provinces });
+
+    // const fetchedProvinces = await fetchProvinces();
+    // // console.log(fetchedProvinces.prov)
+    //   const provinces=fetchedProvinces.prov.map((item)=>{
+    //     return item.province_full
+    //   })
+    // // console.log(provinces)
+    // this.setState({ provinces: provinces });
   }
 
     
@@ -51,15 +55,18 @@ class App extends React.Component {
   };
 
   handleProvinceChange = async (province) => {
-    const provinceData = this.dataCT.active.filter((item)=>{
+    const provinceData = this.state.dataCT.active.filter((item)=>{
       if (item.province==province){
         return item;
-      }
-      
+      }      
     });
+
+    // console.log(provinceData);
 
     this.setState({ dataCP: provinceData, province: province });
   };
+
+
 
   render() {
     const { data, country, isCanada, dataC, dataCP, provinces, province } = this.state;
@@ -80,8 +87,12 @@ class App extends React.Component {
             </ButtonGroup>
             {/* <h1>Canada</h1> */}
             <Cards data={dataC} isCanada={isCanada} />
-            <ProvincePicker provinces={provinces} handleProvinceChange={this.handleProvinceChange} />
-            <Chart data={dataCP} country={province} />
+            <ProvincePicker 
+              // provinces={provinces} 
+              handleProvinceChange={this.handleProvinceChange} 
+            />
+            {/* <ChartCa data={dataCP} country={province} /> */}
+            <Tables dataCP={ dataCP } dataC ={ dataC } province={province}/>
           </>
         ) : (
           <>
