@@ -7,7 +7,7 @@ import styles from "./Cards.module.css";
 import Carda from "./Carda/Carda";
 
 const Cards = ({ data, isCanada }) => {
-  console.log(data);
+  // console.log(data);
   if (isCanada) {
     const { summary } = data;
     var { cases, cumulative_cases, cumulative_deaths, active_cases, date } =
@@ -47,8 +47,8 @@ const Cards = ({ data, isCanada }) => {
             <Carda
               cardData={cumulative_deaths}
               date={date}
-              title="deaths"
-              text="Number of deaths caused by COVID-19"
+              title="total_deaths"
+              text="Number of total deaths caused by COVID-19"
               size={3}
             />
           </>
@@ -65,7 +65,7 @@ const Cards = ({ data, isCanada }) => {
             <Carda
               cardData={deaths.value}
               date={new Date(lastUpdate).toDateString()}
-              title="deaths"
+              title="total_deaths"
               text="Number of deaths caused by COVID-19"
               size={4}
             />

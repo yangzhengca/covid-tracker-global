@@ -104,6 +104,39 @@ export const fetchDataProvSummary = async () => {
     }
 }
 
+export const fetchDataRegionSummary = async (province) => {
+    // let changeableUrl = url;
+
+    // if(country){
+    //     changeableUrl=`${url}/countries/${country}`
+    // }
+
+    try {
+        //destructure data from res, and destructure confirmed, recovered, deaths, lastUpdate from data
+        // const { data: { confirmed, deaths, lastUpdate } } = await axios.get(changeableUrl);
+
+        const { data} = await axios.get(`${urlC}/summary?loc=hr`);
+        if(province=="British Columbia"){
+            province='BC'
+        }else if(province=="Newfoundland and Labrador"){
+            province="NL"
+        }else if(province=="Northwest Territories"){
+            province="NWT"
+        }else if(province=="Prince Edward Island"){
+            province="PEI"
+        }else{
+
+        }
+
+        const dataCPR=data.summary.filter((item)=>item.province==province)
+        console.log(dataCPR)
+        console.log(data)
+        return dataCPR
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const fetchProvinces = async () => {
     // let changeableUrl = url;
 

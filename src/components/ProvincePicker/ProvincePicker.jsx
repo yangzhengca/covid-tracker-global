@@ -5,6 +5,7 @@ import { fetchProvinces } from '../../api'
 
 const ProvincePicker = ({  handleProvinceChange }) => {
     const [ fetchedProvinces, setFetchedProvinces ] = useState([])
+    const [ fetchedProvincesShort, setFetchedProvincesShort ] = useState([])
 
 
     // useEffect(() => {
@@ -18,9 +19,13 @@ const ProvincePicker = ({  handleProvinceChange }) => {
         const fetchAPI = async () => {
             const fetchedProvincesData = await fetchProvinces();
             // console.log(fetchedProvincesData)
-            const provinces=fetchedProvincesData.prov.map((item)=>{
-                return item.province_full
-            })
+            // const provinces=fetchedProvincesData.prov.map((item)=>{
+            //     return item.province_full
+            // })
+            // // console.log(provinces)
+            // setFetchedProvinces(provinces);
+
+            const provinces=fetchedProvincesData.prov
             // console.log(provinces)
             setFetchedProvinces(provinces);
 
@@ -34,7 +39,7 @@ const ProvincePicker = ({  handleProvinceChange }) => {
         <FormControl className={styles.formControl}>
             <NativeSelect defaultValue='' onChange={(e) => handleProvinceChange(e.target.value)}>
                 <option value=''>Whole Country</option>
-                {fetchedProvinces.map((province,i) => <option key={i} value={province}>{province}</option>)}
+                {fetchedProvinces.map((province,i) => <option key={i} value={province.province_full}>{province.province_full}</option>)}
             </NativeSelect>
         </FormControl>
     )

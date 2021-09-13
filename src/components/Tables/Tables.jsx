@@ -1,52 +1,92 @@
 import React from "react";
-// import useStyles from "./styles";
-// import moment from "moment";
-// import { useDispatch, useSelector } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  Container,
+  Paper,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+} from "@material-ui/core";
 
-import { Container, Typography, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from "@material-ui/core"
 
 
-// const useStyles = makeStyles({
-//   table: {
-//     minWidth: 650,
-//   },
-// });
+const Tables = ({ dataCP, dataCPR, province }) => {
+  if (!dataCP.summary) {
+    return "Loading...";
+  }
 
-const Tables = ({ dataCP, dataC, province}) => {
-       
-    // const classes = useStyles();
+  let tableHead = [
+    "Province",
+    "Cases",
+    "Testing",
+    "Active Cases",
+    "Total Cases",
+    "Total Vaccines",
+    "Total Deaths",
+  ];
 
-    if(province){
-      const tableTitle=province
-    }else{
-      const tableTitle="Canada"
-    }
+  let tableHeadH = [
+    "Health Region",
+    "Cases",
+    "Deaths",
+    "Total Cases",
+    "Total Deaths",
+  ];
 
-    let tableHead=['New Cases', 'Testing', 'Active Cases', 'Total Cases', 'Total Vaccines', 'Deaths']
-  
-    return (
-      <Container>
-        <Typography variant="h4" display='inline' align='center'>
-          {province? province : "Canada"}
-        </Typography>
-        <TableContainer component={Paper}>
+  return (
+    <Container>
+      <TableContainer component={Paper}>
+        {province ? (
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                {tableHead.map((item,index)=>
+                {tableHeadH.map((item, index) => (
                   <TableCell key={index}>{item}</TableCell>
-                )}
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
-
+              {dataCPR.map((item, index) => (
+                <TableRow>
+                  <TableCell>{item.health_region}</TableCell>
+                  <TableCell>{item.cases}</TableCell>
+                  <TableCell>{item.deaths}</TableCell>
+                  <TableCell>{item.cumulative_cases}</TableCell>
+                  <TableCell>{item.cumulative_deaths}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
-        </TableContainer>
-      </Container>
-    );
-  };
+        ) : (
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {tableHead.map((item, index) => (
+                  <TableCell key={index}><b>{item}</b></TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {dataCP.summary.map((item, index) => (
+                <TableRow>
+                  <TableCell>{item.province}</TableCell>
+                  <TableCell>{item.cases}</TableCell>
+                  <TableCell>{item.testing}</TableCell>
+                  <TableCell>{item.active_cases}</TableCell>
+                  <TableCell>{item.cumulative_cases}</TableCell>
+                  <TableCell>{item.cumulative_dvaccine}</TableCell>
+                  <TableCell>{item.cumulative_deaths}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </TableContainer>
+    </Container>
+  );
+};
 
-export default Tables
+export default Tables;

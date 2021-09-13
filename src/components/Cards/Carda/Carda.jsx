@@ -17,7 +17,7 @@ const Carda = ({ cardData, date, title, text, size }) => {
     var isDeaths = false;
     var isInfected = false;
 
-  if(title=='deaths'){
+  if(title=='total_deaths'){
     isDeaths = true;
   }else{
     isInfected=true;

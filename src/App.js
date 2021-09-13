@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Cards, Chart, CountryPicker, ProvincePicker, ChartCa, Tables } from "./components";
+import { Cards, Chart, CountryPicker, ProvincePicker,  Tables } from "./components";
 import styles from "./App.module.css";
-import { fetchData, fetchDataC, fetchDataCanadaTime, fetchProvinces, fetchDataProvSummary } from "./api";
+import { fetchData, fetchDataC, fetchDataCanadaTime, fetchProvinces, fetchDataProvSummary, fetchDataRegionSummary } from "./api";
 import covid from "./images/covid.png";
 import { ButtonGroup, Button } from "@material-ui/core";
 
@@ -14,7 +14,8 @@ class App extends React.Component {
     dataC: {},
     dataCT:{},
     dataCP:{},
-    provinces:[]
+    provinces:[],
+    dataCPR:{},
   };
 
   async componentDidMount() {
@@ -31,7 +32,7 @@ class App extends React.Component {
     this.setState({ dataCT: fetchedDataCanadaTime });
 
     const fetchedDataProvSummary = await fetchDataProvSummary()
-    console.log(fetchedDataProvSummary)
+    // console.log(fetchedDataProvSummary)
     this.setState({ dataCP: fetchedDataProvSummary });
 
 
@@ -55,21 +56,18 @@ class App extends React.Component {
   };
 
   handleProvinceChange = async (province) => {
-    const provinceData = this.state.dataCT.active.filter((item)=>{
-      if (item.province==province){
-        return item;
-      }      
-    });
 
-    // console.log(provinceData);
+    const fetchedCPRData = await fetchDataRegionSummary(province);
 
-    this.setState({ dataCP: provinceData, province: province });
+    // console.log(fetchedCPRData);
+
+    this.setState({ dataCPR: fetchedCPRData, province: province });
   };
 
 
 
   render() {
-    const { data, country, isCanada, dataC, dataCP, provinces, province } = this.state;
+    const { data, country, isCanada, dataC, dataCP, provinces, province,dataCPR } = this.state;
 
     return (
       <div className={styles.container}>
@@ -85,14 +83,12 @@ class App extends React.Component {
                 Canada
               </Button>
             </ButtonGroup>
-            {/* <h1>Canada</h1> */}
+
             <Cards data={dataC} isCanada={isCanada} />
             <ProvincePicker 
-              // provinces={provinces} 
               handleProvinceChange={this.handleProvinceChange} 
             />
-            {/* <ChartCa data={dataCP} country={province} /> */}
-            <Tables dataCP={ dataCP } dataC ={ dataC } province={province}/>
+            <Tables dataCP={ dataCP } dataCPR ={ dataCPR } province={province}/>
           </>
         ) : (
           <>
